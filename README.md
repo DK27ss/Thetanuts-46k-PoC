@@ -11,6 +11,8 @@
 >| **Attacker** | [0xE26F5a496db55De2a69Bdc4EEF023927B3c2A209](https://etherscan.io/address/0xE26F5a496db55De2a69Bdc4EEF023927B3c2A209) |
 >| **Profit** | 15,177,162 satoshis (~0.1518 WBTC) |
 
+<img width="1009" height="132" alt="image" src="https://github.com/user-attachments/assets/f2b46d55-9a54-4783-bf61-3fd4c663468b" />
+
 ---
 
 ## Root cause
