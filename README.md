@@ -87,6 +87,8 @@ The attacker contract approves `type(uint256).max` WBTC to both the vault and Mo
 MORPHO.flashLoan(WBTC, 1_000_000_000, data); // 10 WBTC, zero-fee
 ```
 
+<img width="1277" height="95" alt="image" src="https://github.com/user-attachments/assets/7be8b4ea-56af-4434-b6aa-13229d50158c" />
+
 Morpho Blue flashloan are **fee-free**, making the attack cost-free to attempt, the 10 WBTC provides sufficient capital for the deposit manipulation.
 
 // First Deposit - seeding the Share Supply
@@ -94,6 +96,8 @@ Morpho Blue flashloan are **fee-free**, making the attack cost-free to attempt, 
 ```solidity
 VAULT.deposit(2); // 2 satoshis
 ```
+
+<img width="754" height="95" alt="image" src="https://github.com/user-attachments/assets/51bb1253-6002-4a40-b849-b2412e41b55d" />
 
 - `transferFrom(attacker → vault, 2)` ✓
 - `balanceOf(vault)` → `0xe79f27` = 15,179,559 (previous 15,179,557 + 2)
@@ -108,6 +112,8 @@ critical flaw: this share price (~2 sat/share) completely ignores the 15.18M sat
 ```solidity
 VAULT.deposit(468_000_000); // 4.68 WBTC
 ```
+
+<img width="754" height="95" alt="image" src="https://github.com/user-attachments/assets/3cfa2b66-65f8-4ad9-8580-43e41c4e80bd" />
 
 - `transferFrom(attacker → vault, 468,000,000)` ✓
 - `balanceOf(vault)` → `0x1cccbc27` = 483,179,559
@@ -127,10 +133,14 @@ vault minted **468,000,000 shares** — a 1:1 ratio, this confirms the vault dep
 VAULT.initWithdraw(type(uint256).max); // burn all shares
 ```
 
+<img width="1057" height="126" alt="image" src="https://github.com/user-attachments/assets/6d78fdd8-acf8-4e10-b4c8-84f7c69d2104" />
+
 - Burn event: **468,000,001 shares** burned (1 + 468,000,000)
 - `balanceOf(vault)` → 483,179,559 (full balance)
 - `transfer(vault → attacker, 483,177,164)` — nearly entire balance
 - Final `balanceOf(vault)` → `0x095b` = **2,395 satoshis** remaining
+
+<img width="1077" height="90" alt="image" src="https://github.com/user-attachments/assets/eca77097-050f-41bc-88a6-e365f3d62f06" />
 
 withdrawal formula correctly calculates redemption value proportionally:
 
@@ -139,6 +149,8 @@ assets_out = shares * vault_balance / total_supply
            = 468,000,001 * 483,179,559 / 468,002,321
            = 483,177,164 satoshis
 ```
+
+<img width="1077" height="90" alt="image" src="https://github.com/user-attachments/assets/131298b4-cac4-450d-a441-6729b789b9b1" />
 
 reveals the **total supply at withdrawal** was ~468,002,321, meaning other holders had ~2,320 shares (likely from previous rounds), attacker 468,000,001 shares represented **99.9995%** of total supply, entitling them to virtually the entire vault balance including the 15.18M satoshis that belonged to previous depositors.
 
