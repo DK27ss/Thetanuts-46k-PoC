@@ -35,6 +35,8 @@ this state is the precondition, vault has real value but no outstanding claims a
 
 ---
 
+Exploit TX https://app.blocksec.com/phalcon/explorer/tx/eth/0x1bc83899060c27106b6fb4257b208925085794e83b21c444854442fd3554862c
+
 // Approvals
 
 The attacker contract approves `type(uint256).max` WBTC to both the vault and Morpho to enable subsequent operations without additional approval calls.
