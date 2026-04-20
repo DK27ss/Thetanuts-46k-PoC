@@ -35,48 +35,6 @@ this state is the precondition, vault has real value but no outstanding claims a
 
 ---
 
-## Attack Flow
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    ATTACKER CONTRACT                        │
-│  0xE26F5a496db55De2a69Bdc4EEF023927B3c2A209                 │
-└────────────────────────────┬────────────────────────────────┘
-                             │
-        ┌────────────────────┼────────────────────┐
-        ▼                    │                    │
-   1. approve()         2. approve()              │
-   WBTC → Vault         WBTC → Morpho             │
-        │                    │                    │
-        └────────────────────┼────────────────────┘
-                             │
-                             ▼
-                   3. flashLoan(WBTC, 10 BTC)
-                        Morpho Blue
-                             │
-                             ▼
-              ┌─────────────────────────────────┐
-              │  onMorphoFlashLoan() callback   │
-              ├─────────────────────────────────┤
-              │                                 │
-              │  4. deposit(2 satoshis)         │──── mints 1 share
-              │                                 │
-              │  5. deposit(468,000,000 sat)    │──── mints 468,000,000 shares
-              │                                 │
-              │  6. initWithdraw(type(uint).max)│── burns 468,000,001 shares
-              │     → receives 483,177,164 sat  │   returns ENTIRE vault balance
-              │                                 │
-              └─────────────────────────────────┘
-                             │
-                             ▼
-                7. Morpho pulls 1,000,000,000 sat (repayment, no fee)
-                             │
-                             ▼
-                8. Transfer 15,177,162 sat profit → EOA
-```
-
----
-
 // Approvals
 
 The attacker contract approves `type(uint256).max` WBTC to both the vault and Morpho to enable subsequent operations without additional approval calls.
